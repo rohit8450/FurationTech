@@ -1,6 +1,22 @@
 const Items = require("../models/items");
 
 
+// Create Items
+module.exports.createNewItems = async (req, res) => {
+    const newItem = new Items(req.body);
+  
+    try {
+      const itemAdded = await newItem.save();
+      return res
+        .status(200)
+        .json({ itemAdded, message: "Item Added successfully" });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+  };
+
+
 // GetAllitem
 module.exports.getAllItems = async (req, res) => {
   try {
@@ -26,23 +42,8 @@ module.exports.getSpecificitems = async (req, res) => {
 };
 
 
-// Create Items
-module.exports.createNewItems = async (req, res) => {
-  const newItem = new Items(req.body);
 
-  try {
-    const itemAdded = await newItem.save();
-    return res
-      .status(200)
-      .json({ itemAdded, message: "Item Added successfully" });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json(err);
-  }
-};
-
-
-// Update Items
+// Update Item
 module.exports.updateItems = async (req, res) => {
   try {
     const updatedItem = await Items.findByIdAndUpdate(req.params.id, req.body, {
@@ -64,7 +65,7 @@ module.exports.updateItems = async (req, res) => {
 };
 
 
-// Delete items
+// Delete item
 module.exports.deleteItems = async (req, res) => {
   try {
     const deletedItem = await Items.findByIdAndDelete(req.params.id);
